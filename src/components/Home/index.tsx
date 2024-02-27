@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Input } from '../ui/input'
-import axios from 'axios'
+
+import { api } from '@/lib/axios'
 
 const Home = () => {
   const [local, setLocal] = useState('')
@@ -9,10 +10,12 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${local}&appid=8355d68b043db26335f84c0455b810d2&units=metric`,
+        const response = await api.get(
+          `/weather?q=${local}&appid=${import.meta.env.VITE_KEY_WEATHER}`,
         )
-        console.log(response.data.main.temp)
+        setWeather(response.data)
+
+        console.log(response.data)
       } catch (error) {
         console.error('Erro ao buscar dados:', error)
       }
@@ -38,7 +41,6 @@ const Home = () => {
         className="mt-4"
         onChange={handleInputChange}
       />
-      <p>{weather}</p>
     </div>
   )
 }
